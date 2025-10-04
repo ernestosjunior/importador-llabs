@@ -32,8 +32,19 @@ export const aggregate = api.raw(
     const bb = busboy({ headers: req.headers, limits: { files: 3 } });
 
     let content: string = "";
+    let typeError: string | null = null;
 
-    bb.on("file", (_field, file) => {
+    bb.on("file", (_field, file, info) => {
+      const { filename, mimeType } = info;
+
+      const isTxt = filename ? /\.txt$/i.test(filename) : true;
+      const isTextPlain = (mimeType ?? "").toLowerCase() === "text/plain";
+      if (!isTxt || !isTextPlain) {
+        typeError = "Only .txt files with Content-Type text/plain are accepted";
+        file.resume();
+        return;
+      }
+
       file.setEncoding("utf8");
       file.on("data", (chunk: string) => (content += chunk));
       file.on("error", (err) => bb.emit("error", err));
@@ -41,6 +52,10 @@ export const aggregate = api.raw(
 
     bb.on("finish", async () => {
       try {
+        if (typeError) {
+          sendJsonResponse(res, 415, { error: typeError });
+          return;
+        }
         const url = new URL(req.url ?? "", "http://localhost");
         const filters = {
           order_id: url.searchParams.get("order_id")
