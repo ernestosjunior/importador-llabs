@@ -11,7 +11,9 @@ export default defineConfig({
   test: {
     coverage: {
       provider: "v8",
-      exclude: ["encore.gen"],
+      all: true,
+      include: ["order/**/*.ts"],
+      exclude: ["**/encore.service.ts"],
       reporter: ["text", "html", "lcov"],
     },
   },
