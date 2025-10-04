@@ -1,9 +1,9 @@
 import type { UserAggregate } from "../../domain/entities/user-aggregate";
 
 export type AggregateFilters = {
-  orderId?: number;
-  startDate?: string;
-  endDate?: string;
+  order_id?: number;
+  start_date?: string;
+  end_date?: string;
 };
 
 export interface AggregateOrdersUseCase {
