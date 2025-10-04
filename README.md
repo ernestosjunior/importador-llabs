@@ -22,7 +22,8 @@ To see that your app is running, you can ping the API.
 
 ```bash
 curl -X POST "http://localhost:4000/orders" \
-  -F "file=@./dados_legacy.txt;type=text/plain"
+  -H 'Content-Type: multipart/form-data' \
+  -F "=@./dados_legacy.txt;type=text/plain"
 ```
 
 ## Testing
