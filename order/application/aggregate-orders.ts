@@ -1,3 +1,4 @@
+import { Order } from "../domain/entities/order";
 import { UserAggregate } from "../domain/entities/user-aggregate";
 import {
   AggregateFilters,
@@ -12,19 +13,26 @@ export class AggregateOrders implements AggregateOrdersUseCase {
     content: string,
     filters?: AggregateFilters
   ): Promise<UserAggregate[]> {
-    const users = await this.source.aggregateFromFile(content);
+    let users = await this.source.aggregateFromFile(content);
 
-    const start = filters?.start_date ?? "0000-01-01";
-    const end = filters?.end_date ?? "9999-12-31";
+    const orderId = filters?.order_id;
+    const startDate = filters?.start_date;
+    const endDate = filters?.end_date;
 
-    return users.map((user) => ({
-      ...user,
-      orders: user.orders.filter(
-        (order) =>
-          (!filters?.order_id || order.order_id === filters.order_id) &&
-          order.date >= start &&
-          order.date <= end
-      ),
-    }));
+    if (!orderId && !startDate && !endDate) {
+      return users;
+    }
+
+    const matchOrder = (order: Order) =>
+      (orderId === undefined || order.order_id === orderId) &&
+      (!startDate || order.date >= startDate) &&
+      (!endDate || order.date <= endDate);
+
+    return users
+      .map((user) => ({
+        ...user,
+        orders: user.orders.filter(matchOrder),
+      }))
+      .filter((user) => user.orders.length > 0);
   }
 }
