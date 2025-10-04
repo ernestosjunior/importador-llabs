@@ -52,8 +52,10 @@ export function aggregateRows(rows: RowsProps[]): UserAggregate[] {
 
   return Array.from(userMap.values())
     .sort((a, b) => a.user_id - b.user_id)
-    .map((u) => ({
-      ...u,
-      orders: u.orders.sort((a, b) => a.order_id - b.order_id),
+    .map((user) => ({
+      ...user,
+      orders: user.orders.sort(
+        (a, b) => b.date.localeCompare(a.date) || a.order_id - b.order_id
+      ),
     }));
 }
