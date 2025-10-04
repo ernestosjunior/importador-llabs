@@ -5,6 +5,10 @@ export class Money {
     return new Money(0);
   }
 
+  add(other: Money): Money {
+    return new Money(this.cents + other.cents);
+  }
+
   static fromDecimalString(raw: string): Money {
     const s = raw.trim();
 
@@ -20,10 +24,6 @@ export class Money {
     decimal = decimal.padEnd(2, "0").slice(0, 2);
 
     return new Money(Number(integer) * 100 + Number(decimal));
-  }
-
-  add(other: Money): Money {
-    return new Money(this.cents + other.cents);
   }
 
   toDecimalString(): string {
