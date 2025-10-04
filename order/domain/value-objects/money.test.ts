@@ -20,6 +20,18 @@ describe("Domain - ValueObjects - Money", () => {
   });
 
   describe("fromDecimalString", () => {
+    it("should return 0.00 when raw is empty", () => {
+      const m = Money.fromDecimalString("");
+
+      expect(m.toDecimalString()).toBe("0.00");
+    });
+
+    it("should format raw number with .00 when no decimals are present", () => {
+      const m = Money.fromDecimalString("10");
+
+      expect(m.toDecimalString()).toBe("10.00");
+    });
+
     it("should parse a string with decimals correctly", () => {
       const m = Money.fromDecimalString("123.45");
       expect(m.toDecimalString()).toBe("123.45");
