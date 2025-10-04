@@ -10,12 +10,14 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@types/busboy": "^1.5.4",
     "@types/node": "^20.5.7",
     "@vitest/coverage-v8": "^1.6.1",
     "typescript": "^5.2.2",
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "busboy": "^1.6.0",
     "encore.dev": "^1.50.4"
   },
   "optionalDependencies": {
