@@ -6,6 +6,10 @@ const mockFile = `0000000088                             Terra Daniel DDS0000000
 0000000083                          Frances Satterfield00000007910000000006      224.7520211122
 `;
 
+const mockFileWithIncompleteLine = `0000000088                             Terra Daniel DDS00000008360000000003     1899.0220210909
+0000000103 Incomplete Line
+`;
+
 describe("Adapters - Parsers - ParseLegacyFile", () => {
   it("should return empty array value", () => {
     const out = parseLegacyFile("");
@@ -29,5 +33,11 @@ describe("Adapters - Parsers - ParseLegacyFile", () => {
     const out = parseLegacyFile(mockFile);
 
     expect(out).toHaveLength(3);
+  });
+
+  it("should ignore line if length is less than purchase_date field", () => {
+    const out = parseLegacyFile(mockFileWithIncompleteLine);
+
+    expect(out).toHaveLength(1);
   });
 });
