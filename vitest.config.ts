@@ -10,7 +10,9 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      provider: "istanbul",
+      provider: "v8",
+      exclude: ["encore.gen"],
+      reporter: ["text", "html", "lcov"],
     },
   },
 });
