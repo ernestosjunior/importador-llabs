@@ -2,7 +2,7 @@ import type { Product } from "../entities/product";
 import type { UserAggregate } from "../entities/user-aggregate";
 import { Money } from "../value-objects/money";
 
-type RowsProps = {
+export type RowsProps = {
   user_id: number;
   user_name: string;
   order_id: number;
@@ -46,7 +46,7 @@ export function aggregateRows(rows: RowsProps[]): UserAggregate[] {
         .map((p) => Money.fromDecimalString(p.value))
         .reduce((acc, m) => acc.add(m), Money.fromDecimalString("0.00"));
 
-      order.total = total.toString();
+      order.total = total.toDecimalString();
     }
   }
 
